@@ -23,7 +23,7 @@ export default class AchievementUnlockFetcher {
     let offset = 0;
     const count = 500;
     let hasMore = true;
-    let backoff = 250; // ms
+    let backoff = 1000; // ms
 
     const startDate = new Date(startDateStr);
     const endDate = new Date(endDateStr);
@@ -59,8 +59,7 @@ export default class AchievementUnlockFetcher {
           hasMore = false;
         }
       } catch (err) {
-        if (err && err.response && err.response.status === 429) {
-          // I've not properly tested exponential backoff because I can't reliably trigger rate limiting, TODO: test this
+        if (err && err.message === "HTTP Error: Status 429 Too Many Requests") {
           console.warn(`Rate limit hit, backing off for ${backoff} ms`);
           await sleep(backoff);
           backoff = Math.min(backoff * 2, 10000);
