@@ -23,6 +23,7 @@ export default class AchievementUnlockFetcher {
     let offset = 0;
     const count = 500;
     let hasMore = true;
+    let defaultWait = 250; // ms
     let backoff = 1000; // ms
 
     const startDate = new Date(startDateStr);
@@ -58,6 +59,7 @@ export default class AchievementUnlockFetcher {
         } else {
           hasMore = false;
         }
+        await sleep(defaultWait);
       } catch (err) {
         if (err && err.message === "HTTP Error: Status 429 Too Many Requests") {
           console.warn(`Rate limit hit, backing off for ${backoff} ms`);
