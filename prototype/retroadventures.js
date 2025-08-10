@@ -14,7 +14,7 @@ const achievementUnlockFetcher = new AchievementUnlockFetcher(
 
 if (!process.argv[2]) {
   console.error(
-    "Error: Please provide a date in the format YYYY-MM-DD. Usage: node retroadventures.js [date]",
+    "Error: Please provide a date in the format YYYY-MM-DD. Usage: node retroadventures.js [startDate] [endDate (optional)]",
   );
   process.exit(1);
 }
@@ -22,7 +22,7 @@ const givenDateStr = process.argv[2];
 
 const eventStartDateStr = "2025-07-16T00:00:00Z";
 const startDateStr = `${givenDateStr}T00:00:00Z`;
-const endDateStr = `${givenDateStr}T23:59:59Z`;
+const endDateStr = `${process.argv[3] || givenDateStr}T23:59:59Z`;
 
 function outputUserList(userList) {
   return userList.sort().join(",");
@@ -282,6 +282,7 @@ async function retroAdventureWeek2() {
 }
 
 async function retroAdventureWeek3() {
+  const week3StartDateStr = "2025-07-30T00:00:00Z";
   const userList = {
     optionalTaskA: await achievementUnlockFetcher.getUsersForAchievement({
       achievementId: 533812,
@@ -411,6 +412,12 @@ async function retroAdventureWeek3() {
     alreadyHasCredit: await achievementUnlockFetcher.getUsersForAchievement({
       achievementId: 530936,
       startDateStr: eventStartDateStr,
+      endDateStr,
+    }),
+
+    solvedPuzzle: await achievementUnlockFetcher.getUsersForAchievement({
+      achievementId: 257210,
+      startDateStr,
       endDateStr,
     }),
   };
@@ -559,11 +566,208 @@ async function retroAdventureWeek3() {
     taskName: "Go Straight Monster Tamer",
   });
 
+  addTaskSummaryIfNotEmpty({
+    output,
+    userList: userList.solvedPuzzle,
+    weekNumber: 3,
+    taskNumber: 12,
+    taskName: "Successfully Solved the Puzzle",
+  });
+
+  output.push(
+    `-# **Chapter 3 Completion awarded to ${newlyCompletedUsers.length} ${newlyCompletedUsers.length > 1 ? "players" : "player"}**: ${outputUserList(newlyCompletedUsers)}`,
+  );
+
+  return output.join("\n");
+}
+
+async function retroAdventureWeek4() {
+  const userList = {
+    climbA: await achievementUnlockFetcher.getUsersForAchievement({
+      achievementId: 535506,
+      startDateStr,
+      endDateStr,
+    }),
+    climbB: await achievementUnlockFetcher.getUsersForAchievement({
+      achievementId: 536725,
+      startDateStr,
+      endDateStr,
+    }),
+    climbAOptional: await achievementUnlockFetcher.getUsersForAchievement({
+      achievementId: 536729,
+      startDateStr,
+      endDateStr,
+    }),
+    climbBOptional: await achievementUnlockFetcher.getUsersForAchievement({
+      achievementId: 536730,
+      startDateStr,
+      endDateStr,
+    }),
+
+    swampPath: await achievementUnlockFetcher.getUsersForAchievement({
+      achievementId: 536727,
+      startDateStr,
+      endDateStr,
+    }),
+    mountainPath: await achievementUnlockFetcher.getUsersForAchievement({
+      achievementId: 536726,
+      startDateStr,
+      endDateStr,
+    }),
+    darkPath: await achievementUnlockFetcher.getUsersForAchievement({
+      achievementId: 536728,
+      startDateStr,
+      endDateStr,
+    }),
+
+    climbATotal: await achievementUnlockFetcher.getUsersForAchievement({
+      achievementId: 535506,
+      startDateStr: eventStartDateStr,
+      endDateStr,
+    }),
+    climbBTotal: await achievementUnlockFetcher.getUsersForAchievement({
+      achievementId: 536725,
+      startDateStr: eventStartDateStr,
+      endDateStr,
+    }),
+    climbAOptionalTotal: await achievementUnlockFetcher.getUsersForAchievement({
+      achievementId: 536729,
+      startDateStr: eventStartDateStr,
+      endDateStr,
+    }),
+    climbBOptionalTotal: await achievementUnlockFetcher.getUsersForAchievement({
+      achievementId: 536730,
+      startDateStr: eventStartDateStr,
+      endDateStr,
+    }),
+
+    swampPathTotal: await achievementUnlockFetcher.getUsersForAchievement({
+      achievementId: 536727,
+      startDateStr: eventStartDateStr,
+      endDateStr,
+    }),
+    mountainPathTotal: await achievementUnlockFetcher.getUsersForAchievement({
+      achievementId: 536726,
+      startDateStr: eventStartDateStr,
+      endDateStr,
+    }),
+    darkPathTotal: await achievementUnlockFetcher.getUsersForAchievement({
+      achievementId: 536728,
+      startDateStr: eventStartDateStr,
+      endDateStr,
+    }),
+
+    alreadyHasCredit: await achievementUnlockFetcher.getUsersForAchievement({
+      achievementId: 530937,
+      startDateStr: eventStartDateStr,
+      endDateStr,
+    }),
+  };
+
+  const swampPathTotal = userList.swampPathTotal.length;
+  const mountainPathTotal = userList.mountainPathTotal.length;
+  const darkPathTotal = userList.darkPathTotal.length;
+  const swampPathVotesPercentage = (
+    (swampPathTotal / (swampPathTotal + mountainPathTotal + darkPathTotal)) *
+    100
+  ).toFixed(1);
+  const mountainPathVotesPercentage = (
+    (mountainPathTotal / (swampPathTotal + mountainPathTotal + darkPathTotal)) *
+    100
+  ).toFixed(1);
+  const darkPathVotesPercentage = (
+    (darkPathTotal / (swampPathTotal + mountainPathTotal + darkPathTotal)) *
+    100
+  ).toFixed(1);
+
+  const earnedTask13Today = [
+    ...new Set([...userList.climbA, ...userList.climbB]),
+  ];
+  const earnedTask14Today = [
+    ...new Set([
+      ...userList.swampPath,
+      ...userList.mountainPath,
+      ...userList.darkPath,
+    ]),
+  ];
+  const earnedTask13Ever = [
+    ...new Set([...userList.climbATotal, ...userList.climbBTotal]),
+  ];
+  const earnedTask14Ever = [
+    ...new Set([
+      ...userList.swampPathTotal,
+      ...userList.mountainPathTotal,
+      ...userList.darkPathTotal,
+    ]),
+  ];
+  const eligibleForCredit = [
+    ...new Set([
+      ...earnedTask13Today.filter((user) => earnedTask14Ever.includes(user)),
+      ...earnedTask14Today.filter((user) => earnedTask13Ever.includes(user)),
+    ]),
+  ];
+
+  const newlyCompletedUsers = eligibleForCredit.filter(
+    (user) => !userList.alreadyHasCredit.includes(user),
+  );
+
+  const output = [];
+
+  addTaskSummaryIfNotEmpty({
+    output,
+    userList: userList.climbA,
+    weekNumber: 4,
+    taskNumber: 13,
+    taskName: "Celeste Climb",
+  });
+  addTaskSummaryIfNotEmpty({
+    output,
+    userList: userList.climbB,
+    weekNumber: 4,
+    taskNumber: 13,
+    taskName: "Jungle Climber",
+  });
+  addTaskSummaryIfNotEmpty({
+    output,
+    userList: userList.mountainPath,
+    weekNumber: 4,
+    taskNumber: 14,
+    taskName: "Mountain Path",
+  });
+  addTaskSummaryIfNotEmpty({
+    output,
+    userList: userList.swampPath,
+    weekNumber: 4,
+    taskNumber: 14,
+    taskName: "Swamp Path",
+  });
+  addTaskSummaryIfNotEmpty({
+    output,
+    userList: userList.darkPath,
+    weekNumber: 4,
+    taskNumber: 14,
+    taskName: "Dark Path",
+  });
+  addTaskSummaryIfNotEmpty({
+    output,
+    userList: userList.climbAOptional,
+    weekNumber: 4,
+    taskNumber: 16,
+    taskName: "Celeste Strawberries",
+  });
+  addTaskSummaryIfNotEmpty({
+    output,
+    userList: userList.climbBOptional,
+    weekNumber: 4,
+    taskNumber: 16,
+    taskName: "Jungle Climber Collectibles",
+  });
+
   output.push(
     ``,
-    `**Current Vote**: Go Straight Ahead - ${option1VotesTotal} (${option1VotesPercentage}%), Take The Side Path - ${option2VotesTotal} (${option2VotesPercentage}%)`,
+    `**Current Vote**: Mountain Path - ${mountainPathTotal} (${mountainPathVotesPercentage}%), Swamp Path - ${swampPathTotal} (${swampPathVotesPercentage}%), Dark Path - ${darkPathTotal} (${darkPathVotesPercentage}%)`,
     ``,
-    `-# **Chapter 3 Completion awarded to ${newlyCompletedUsers.length} ${newlyCompletedUsers.length > 1 ? "players" : "player"}**: ${outputUserList(newlyCompletedUsers)}`,
+    `-# **Chapter 4 Completion awarded to ${newlyCompletedUsers.length} ${newlyCompletedUsers.length > 1 ? "players" : "player"}**: ${outputUserList(newlyCompletedUsers)}`,
   );
 
   return output.join("\n");
@@ -573,13 +777,17 @@ const outputs = {
   week1: await retroAdventureWeek1(),
   week2: await retroAdventureWeek2(),
   week3: await retroAdventureWeek3(),
+  week4: await retroAdventureWeek4(),
 };
 
 console.log(
   [
-    `# RetroAdventures: tRAsure Island - Summary for ${givenDateStr}`,
+    process.argv[3]
+      ? `# RetroAdventures: tRAsure Island - Summary for ${givenDateStr} to ${process.argv[3]}`
+      : `# RetroAdventures: tRAsure Island - Summary for ${givenDateStr}`,
     outputs.week1,
     outputs.week2,
     outputs.week3,
+    outputs.week4,
   ].join("\n\n"),
 );
