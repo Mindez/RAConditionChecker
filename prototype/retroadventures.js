@@ -7,6 +7,11 @@ if (!process.env.RA_API_USER || !process.env.RA_API_KEY) {
   );
   process.exit(1);
 }
+if (!process.env.TASK_19_SEED) {
+  console.error(
+    "Error: Please provide a seed for task 19 in the TASK_19_SEED environment variable. This should be a JSON string representation of an array of 10 numbers.",
+  );
+}
 const achievementUnlockFetcher = new AchievementUnlockFetcher(
   process.env.RA_API_USER,
   process.env.RA_API_KEY,
@@ -24,6 +29,8 @@ const eventStartDateStr = "2025-07-16T00:00:00Z";
 const startDateStr = `${givenDateStr}T00:00:00Z`;
 const endDateStr = `${process.argv[3] || givenDateStr}T23:59:59Z`;
 
+const task19RandomSeeds = JSON.parse(process.env.TASK_19_SEED);
+
 function outputUserList(userList) {
   return userList.sort().join(",");
 }
@@ -39,6 +46,81 @@ function addTaskSummaryIfNotEmpty({
     output.push(
       `-# **Week ${weekNumber} - Task ${taskNumber} - ${taskName} (Completed by ${userList.length} ${userList.length > 1 ? "users" : "user"} today)**: ${outputUserList(userList)}`,
     );
+}
+
+function getTask19RewardList({ username }) {
+  let seedName = username.toUpperCase();
+  if (seedName.length > 10) {
+    seedName = seedName.slice(seedName.length - 10);
+  }
+
+  while (seedName.length < 10) {
+    seedName = seedName.slice(0, 1) + seedName;
+  }
+
+  let seedCharCodes = seedName.split("").map((char) => char.charCodeAt(0) - 48);
+
+  const saltedCharCodes = seedCharCodes.map(
+    (code, index) => code * task19RandomSeeds[index],
+  );
+
+  const permutationNumber =
+    saltedCharCodes.reduce((acc, code) => acc + code) %
+    (8 * 7 * 6 * 5 * 4 * 3 * 2 * 1);
+
+  let remaining = permutationNumber;
+  const indexNW = remaining % 8;
+  remaining = Math.floor(remaining / 8);
+  const indexN = remaining % 7;
+  remaining = Math.floor(remaining / 7);
+  const indexNE = remaining % 6;
+  remaining = Math.floor(remaining / 6);
+  const indexE = remaining % 5;
+  remaining = Math.floor(remaining / 5);
+  const indexSE = remaining % 4;
+  remaining = Math.floor(remaining / 4);
+  const indexS = remaining % 3;
+  remaining = Math.floor(remaining / 3);
+  const indexSW = remaining % 2;
+  remaining = Math.floor(remaining / 2);
+  const indexW = remaining;
+
+  const directionIndices = {
+    nw: indexNW,
+    n: indexN,
+    ne: indexNE,
+    e: indexE,
+    se: indexSE,
+    s: indexS,
+    sw: indexSW,
+    w: indexW,
+  };
+
+  const rewards = {
+    A: "A Gap in the Wall (Entrance)",
+    B: "An Underground Tunnel (Entrance)",
+    C: "2 AP",
+    D: "1 AP",
+    E: "A Small Locked Box",
+    F: "A Small Shiny Key",
+    G: "A Large Gold Key",
+    H: "Nothing",
+  };
+
+  const rewardIndices = ["A", "B", "C", "D", "E", "F", "G", "H"];
+
+  const rewardList = {
+    nw: rewards[rewardIndices.splice(indexNW, 1)[0]],
+    n: rewards[rewardIndices.splice(indexN, 1)[0]],
+    ne: rewards[rewardIndices.splice(indexNE, 1)[0]],
+    e: rewards[rewardIndices.splice(indexE, 1)[0]],
+    se: rewards[rewardIndices.splice(indexSE, 1)[0]],
+    s: rewards[rewardIndices.splice(indexS, 1)[0]],
+    sw: rewards[rewardIndices.splice(indexSW, 1)[0]],
+    w: rewards[rewardIndices.splice(indexW, 1)[0]],
+  };
+
+  return rewardList;
 }
 
 async function retroAdventureWeek1() {
@@ -773,11 +855,377 @@ async function retroAdventureWeek4() {
   return output.join("\n");
 }
 
+async function retroAdventureWeek5() {
+  const userList = {
+    darkForestA: await achievementUnlockFetcher.getUsersForAchievement({
+      achievementId: 536731,
+      startDateStr,
+      endDateStr,
+    }),
+    darkForestB: await achievementUnlockFetcher.getUsersForAchievement({
+      achievementId: 538753,
+      startDateStr,
+      endDateStr,
+    }),
+    darkForestC: await achievementUnlockFetcher.getUsersForAchievement({
+      achievementId: 538754,
+      startDateStr,
+      endDateStr,
+    }),
+
+    searchNW: await achievementUnlockFetcher.getUsersForAchievement({
+      achievementId: 538755,
+      startDateStr,
+      endDateStr,
+    }),
+    searchN: await achievementUnlockFetcher.getUsersForAchievement({
+      achievementId: 538756,
+      startDateStr,
+      endDateStr,
+    }),
+    searchNE: await achievementUnlockFetcher.getUsersForAchievement({
+      achievementId: 538757,
+      startDateStr,
+      endDateStr,
+    }),
+    searchE: await achievementUnlockFetcher.getUsersForAchievement({
+      achievementId: 538758,
+      startDateStr,
+      endDateStr,
+    }),
+    searchSE: await achievementUnlockFetcher.getUsersForAchievement({
+      achievementId: 538759,
+      startDateStr,
+      endDateStr,
+    }),
+    searchS: await achievementUnlockFetcher.getUsersForAchievement({
+      achievementId: 538760,
+      startDateStr,
+      endDateStr,
+    }),
+    searchSW: await achievementUnlockFetcher.getUsersForAchievement({
+      achievementId: 538761,
+      startDateStr,
+      endDateStr,
+    }),
+    searchW: await achievementUnlockFetcher.getUsersForAchievement({
+      achievementId: 538762,
+      startDateStr,
+      endDateStr,
+    }),
+
+    darkForestATotal: await achievementUnlockFetcher.getUsersForAchievement({
+      achievementId: 536731,
+      startDateStr: eventStartDateStr,
+      endDateStr,
+    }),
+    darkForestBTotal: await achievementUnlockFetcher.getUsersForAchievement({
+      achievementId: 538753,
+      startDateStr: eventStartDateStr,
+      endDateStr,
+    }),
+    darkForestCTotal: await achievementUnlockFetcher.getUsersForAchievement({
+      achievementId: 538754,
+      startDateStr: eventStartDateStr,
+      endDateStr,
+    }),
+    searchNWTotal: await achievementUnlockFetcher.getUsersForAchievement({
+      achievementId: 538755,
+      startDateStr: eventStartDateStr,
+      endDateStr,
+    }),
+    searchNTotal: await achievementUnlockFetcher.getUsersForAchievement({
+      achievementId: 538756,
+      startDateStr: eventStartDateStr,
+      endDateStr,
+    }),
+    searchNETotal: await achievementUnlockFetcher.getUsersForAchievement({
+      achievementId: 538757,
+      startDateStr: eventStartDateStr,
+      endDateStr,
+    }),
+    searchETotal: await achievementUnlockFetcher.getUsersForAchievement({
+      achievementId: 538758,
+      startDateStr: eventStartDateStr,
+      endDateStr,
+    }),
+    searchSETotal: await achievementUnlockFetcher.getUsersForAchievement({
+      achievementId: 538759,
+      startDateStr: eventStartDateStr,
+      endDateStr,
+    }),
+    searchSTotal: await achievementUnlockFetcher.getUsersForAchievement({
+      achievementId: 538760,
+      startDateStr: eventStartDateStr,
+      endDateStr,
+    }),
+    searchSWTotal: await achievementUnlockFetcher.getUsersForAchievement({
+      achievementId: 538761,
+      startDateStr: eventStartDateStr,
+      endDateStr,
+    }),
+    searchWTotal: await achievementUnlockFetcher.getUsersForAchievement({
+      achievementId: 538762,
+      startDateStr: eventStartDateStr,
+      endDateStr,
+    }),
+
+    alreadyHasCredit: await achievementUnlockFetcher.getUsersForAchievement({
+      achievementId: 530938,
+      startDateStr: eventStartDateStr,
+      endDateStr,
+    }),
+  };
+
+  const earnedTask18Today = [
+    ...new Set([
+      ...userList.darkForestA,
+      ...userList.darkForestB,
+      ...userList.darkForestC,
+    ]),
+  ];
+
+  const earnedTask18Ever = [
+    ...new Set([
+      ...userList.darkForestATotal,
+      ...userList.darkForestBTotal,
+      ...userList.darkForestCTotal,
+    ]),
+  ];
+
+  const earnedTask19RewardEver = [
+    ...new Set([
+      ...userList.searchNWTotal,
+      ...userList.searchNTotal,
+      ...userList.searchNETotal,
+      ...userList.searchETotal,
+      ...userList.searchSETotal,
+      ...userList.searchSTotal,
+      ...userList.searchSWTotal,
+      ...userList.searchWTotal,
+    ]),
+  ];
+
+  const fullRewardList = {};
+  earnedTask19RewardEver.forEach(
+    (user) => (fullRewardList[user] = getTask19RewardList({ username: user })),
+  );
+
+  const earnedRewards = [
+    { direction: "nw", fullName: "North West", users: userList.searchNW },
+    { direction: "n", fullName: "North", users: userList.searchN },
+    { direction: "ne", fullName: "North East", users: userList.searchNE },
+    { direction: "e", fullName: "East", users: userList.searchE },
+    { direction: "se", fullName: "South East", users: userList.searchSE },
+    { direction: "s", fullName: "South", users: userList.searchS },
+    { direction: "sw", fullName: "South West", users: userList.searchSW },
+    { direction: "w", fullName: "West", users: userList.searchW },
+  ];
+
+  const earnedRewardsEver = [
+    { direction: "nw", fullName: "North West", users: userList.searchNWTotal },
+    { direction: "n", fullName: "North", users: userList.searchNTotal },
+    { direction: "ne", fullName: "North East", users: userList.searchNETotal },
+    { direction: "e", fullName: "East", users: userList.searchETotal },
+    { direction: "se", fullName: "South East", users: userList.searchSETotal },
+    { direction: "s", fullName: "South", users: userList.searchSTotal },
+    { direction: "sw", fullName: "South West", users: userList.searchSWTotal },
+    { direction: "w", fullName: "West", users: userList.searchWTotal },
+  ];
+
+  const rewardDataToday = [];
+  earnedRewards.forEach((direction) => {
+    direction.users.sort().forEach((user) => {
+      rewardDataToday.push({
+        user: user,
+        direction: direction.direction,
+        fullDirectionName: direction.fullName,
+        reward: fullRewardList[user][direction.direction],
+      });
+    });
+  });
+
+  const rewardDataAllTime = [];
+  earnedRewardsEver.forEach((direction) => {
+    direction.users.sort().forEach((user) => {
+      rewardDataAllTime.push({
+        user: user,
+        direction: direction.direction,
+        fullDirectionName: direction.fullName,
+        reward: fullRewardList[user][direction.direction],
+      });
+    });
+  });
+
+  rewardDataToday.sort((a, b) => {
+    const userA = a.user.toLowerCase();
+    const userB = b.user.toLowerCase();
+    if (userA < userB) return -1;
+    if (userA > userB) return 1;
+    return 0;
+  });
+
+  const rewardSummary = [];
+  rewardDataToday.forEach((data) => {
+    rewardSummary.push(
+      `[user=${data.user}] searched the [b]${data.fullDirectionName}[/b] side of the temple and got [b]${data.reward}[/b]`,
+    );
+  });
+
+  console.log(`=== TASK 19 REWARD SUMMARY ===`);
+  console.log(rewardSummary.join("\n"));
+
+  const entranceAUsersToday = rewardDataToday
+    .filter((data) => data.reward === "A Gap in the Wall (Entrance)")
+    .map((data) => data.user);
+  const entranceBUsersToday = rewardDataToday
+    .filter((data) => data.reward === "An Underground Tunnel (Entrance)")
+    .map((data) => data.user);
+  const entranceAUsersAllTime = rewardDataAllTime
+    .filter((data) => data.reward === "A Gap in the Wall (Entrance)")
+    .map((data) => data.user);
+  const entranceBUsersAllTime = rewardDataAllTime
+    .filter((data) => data.reward === "An Underground Tunnel (Entrance)")
+    .map((data) => data.user);
+
+  const entranceAVotesTotal = entranceAUsersAllTime.length;
+  const entranceBVotesTotal = entranceBUsersAllTime.length;
+  const entranceAVotesPercentage = (
+    (entranceAVotesTotal / (entranceAVotesTotal + entranceBVotesTotal)) *
+    100
+  ).toFixed(1);
+  const entranceBVotesPercentage = (
+    (entranceBVotesTotal / (entranceAVotesTotal + entranceBVotesTotal)) *
+    100
+  ).toFixed(1);
+
+  const earnedTask19Today = [
+    ...new Set([...entranceAUsersToday, ...entranceBUsersToday]),
+  ];
+
+  const earnedTask19Ever = [
+    ...new Set([...entranceAUsersAllTime, ...entranceBUsersAllTime]),
+  ];
+
+  const newlyCompletedUsers = [
+    ...new Set([
+      ...earnedTask18Today.filter((user) => earnedTask19Ever.includes(user)),
+      ...earnedTask19Today.filter((user) => earnedTask18Ever.includes(user)),
+    ]),
+  ].filter((user) => !userList.alreadyHasCredit.includes(user));
+
+  const output = [];
+
+  addTaskSummaryIfNotEmpty({
+    output,
+    userList: userList.darkForestA,
+    weekNumber: 5,
+    taskNumber: 18,
+    taskName: "Berenstain Bears Dark Forest",
+  });
+  addTaskSummaryIfNotEmpty({
+    output,
+    userList: userList.darkForestB,
+    weekNumber: 5,
+    taskNumber: 18,
+    taskName: "Tengai Makyou Zero Dark Forest",
+  });
+  addTaskSummaryIfNotEmpty({
+    output,
+    userList: userList.darkForestC,
+    weekNumber: 5,
+    taskNumber: 18,
+    taskName: "Actraiser Dark Forest",
+  });
+  addTaskSummaryIfNotEmpty({
+    output,
+    userList: rewardDataToday
+      .filter((data) => data.reward === "A Gap in the Wall (Entrance)")
+      .map((data) => data.user),
+    weekNumber: 5,
+    taskNumber: 19,
+    taskName: "A Gap in the Wall (Entrance)",
+  });
+  addTaskSummaryIfNotEmpty({
+    output,
+    userList: rewardDataToday
+      .filter((data) => data.reward === "An Underground Tunnel (Entrance)")
+      .map((data) => data.user),
+    weekNumber: 5,
+    taskNumber: 19,
+    taskName: "An Underground Tunnel (Entrance)",
+  });
+  addTaskSummaryIfNotEmpty({
+    output,
+    userList: rewardDataToday
+      .filter((data) => data.reward === "2 AP")
+      .map((data) => data.user),
+    weekNumber: 5,
+    taskNumber: 19,
+    taskName: "2 AP",
+  });
+  addTaskSummaryIfNotEmpty({
+    output,
+    userList: rewardDataToday
+      .filter((data) => data.reward === "1 AP")
+      .map((data) => data.user),
+    weekNumber: 5,
+    taskNumber: 19,
+    taskName: "1 AP",
+  });
+  addTaskSummaryIfNotEmpty({
+    output,
+    userList: rewardDataToday
+      .filter((data) => data.reward === "A Small Locked Box")
+      .map((data) => data.user),
+    weekNumber: 5,
+    taskNumber: 19,
+    taskName: "A Small Locked Box",
+  });
+  addTaskSummaryIfNotEmpty({
+    output,
+    userList: rewardDataToday
+      .filter((data) => data.reward === "A Small Shiny Key")
+      .map((data) => data.user),
+    weekNumber: 5,
+    taskNumber: 19,
+    taskName: "A Small Shiny Key",
+  });
+  addTaskSummaryIfNotEmpty({
+    output,
+    userList: rewardDataToday
+      .filter((data) => data.reward === "A Large Gold Key")
+      .map((data) => data.user),
+    weekNumber: 5,
+    taskNumber: 19,
+    taskName: "A Large Gold Key",
+  });
+  addTaskSummaryIfNotEmpty({
+    output,
+    userList: rewardDataToday
+      .filter((data) => data.reward === "Nothing")
+      .map((data) => data.user),
+    weekNumber: 5,
+    taskNumber: 19,
+    taskName: "Nothing",
+  });
+
+  output.push(
+    ``,
+    `**Current Vote**: A Gap In The Wall - ${entranceAVotesTotal} (${entranceAVotesPercentage}%), An Underground Tunnel - ${entranceBVotesTotal} (${entranceBVotesPercentage}%)`,
+    ``,
+    `-# **Chapter 5 Completion awarded to ${newlyCompletedUsers.length} ${newlyCompletedUsers.length > 1 ? "players" : "player"}**: ${outputUserList(newlyCompletedUsers)}`,
+  );
+
+  return output.join("\n");
+}
+
 const outputs = {
   week1: await retroAdventureWeek1(),
   week2: await retroAdventureWeek2(),
   week3: await retroAdventureWeek3(),
   week4: await retroAdventureWeek4(),
+  week5: await retroAdventureWeek5(),
 };
 
 console.log(
@@ -789,5 +1237,6 @@ console.log(
     outputs.week2,
     outputs.week3,
     outputs.week4,
+    outputs.week5,
   ].join("\n\n"),
 );
