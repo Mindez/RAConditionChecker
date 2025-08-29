@@ -846,9 +846,6 @@ async function retroAdventureWeek4() {
   });
 
   output.push(
-    ``,
-    `**Current Vote**: Mountain Path - ${mountainPathTotal} (${mountainPathVotesPercentage}%), Swamp Path - ${swampPathTotal} (${swampPathVotesPercentage}%), Dark Path - ${darkPathTotal} (${darkPathVotesPercentage}%)`,
-    ``,
     `-# **Chapter 4 Completion awarded to ${newlyCompletedUsers.length} ${newlyCompletedUsers.length > 1 ? "players" : "player"}**: ${outputUserList(newlyCompletedUsers)}`,
   );
 
@@ -1211,32 +1208,712 @@ async function retroAdventureWeek5() {
   });
 
   output.push(
-    ``,
-    `**Current Vote**: A Gap In The Wall - ${entranceAVotesTotal} (${entranceAVotesPercentage}%), An Underground Tunnel - ${entranceBVotesTotal} (${entranceBVotesPercentage}%)`,
-    ``,
     `-# **Chapter 5 Completion awarded to ${newlyCompletedUsers.length} ${newlyCompletedUsers.length > 1 ? "players" : "player"}**: ${outputUserList(newlyCompletedUsers)}`,
   );
 
   return output.join("\n");
 }
 
-const outputs = {
-  week1: await retroAdventureWeek1(),
-  week2: await retroAdventureWeek2(),
-  week3: await retroAdventureWeek3(),
-  week4: await retroAdventureWeek4(),
-  week5: await retroAdventureWeek5(),
-};
+async function retroAdventureWeek6() {
+  const userList = {
+    searchNW: await achievementUnlockFetcher.getUsersForAchievement({
+      achievementId: 538755,
+      startDateStr,
+      endDateStr,
+    }),
+    searchN: await achievementUnlockFetcher.getUsersForAchievement({
+      achievementId: 538756,
+      startDateStr,
+      endDateStr,
+    }),
+    searchNE: await achievementUnlockFetcher.getUsersForAchievement({
+      achievementId: 538757,
+      startDateStr,
+      endDateStr,
+    }),
+    searchE: await achievementUnlockFetcher.getUsersForAchievement({
+      achievementId: 538758,
+      startDateStr,
+      endDateStr,
+    }),
+    searchSE: await achievementUnlockFetcher.getUsersForAchievement({
+      achievementId: 538759,
+      startDateStr,
+      endDateStr,
+    }),
+    searchS: await achievementUnlockFetcher.getUsersForAchievement({
+      achievementId: 538760,
+      startDateStr,
+      endDateStr,
+    }),
+    searchSW: await achievementUnlockFetcher.getUsersForAchievement({
+      achievementId: 538761,
+      startDateStr,
+      endDateStr,
+    }),
+    searchW: await achievementUnlockFetcher.getUsersForAchievement({
+      achievementId: 538762,
+      startDateStr,
+      endDateStr,
+    }),
+    searchNWTotal: await achievementUnlockFetcher.getUsersForAchievement({
+      achievementId: 538755,
+      startDateStr: eventStartDateStr,
+      endDateStr,
+    }),
+    searchNTotal: await achievementUnlockFetcher.getUsersForAchievement({
+      achievementId: 538756,
+      startDateStr: eventStartDateStr,
+      endDateStr,
+    }),
+    searchNETotal: await achievementUnlockFetcher.getUsersForAchievement({
+      achievementId: 538757,
+      startDateStr: eventStartDateStr,
+      endDateStr,
+    }),
+    searchETotal: await achievementUnlockFetcher.getUsersForAchievement({
+      achievementId: 538758,
+      startDateStr: eventStartDateStr,
+      endDateStr,
+    }),
+    searchSETotal: await achievementUnlockFetcher.getUsersForAchievement({
+      achievementId: 538759,
+      startDateStr: eventStartDateStr,
+      endDateStr,
+    }),
+    searchSTotal: await achievementUnlockFetcher.getUsersForAchievement({
+      achievementId: 538760,
+      startDateStr: eventStartDateStr,
+      endDateStr,
+    }),
+    searchSWTotal: await achievementUnlockFetcher.getUsersForAchievement({
+      achievementId: 538761,
+      startDateStr: eventStartDateStr,
+      endDateStr,
+    }),
+    searchWTotal: await achievementUnlockFetcher.getUsersForAchievement({
+      achievementId: 538762,
+      startDateStr: eventStartDateStr,
+      endDateStr,
+    }),
+
+    earnedGapInWallA: await achievementUnlockFetcher.getUsersForAchievement({
+      achievementId: 538763,
+      startDateStr,
+      endDateStr,
+    }),
+    earnedGapInWallB: await achievementUnlockFetcher.getUsersForAchievement({
+      achievementId: 539801,
+      startDateStr,
+      endDateStr,
+    }),
+    earnedUndergroundTunnelA:
+      await achievementUnlockFetcher.getUsersForAchievement({
+        achievementId: 539802,
+        startDateStr,
+        endDateStr,
+      }),
+    earnedUndergroundTunnelB:
+      await achievementUnlockFetcher.getUsersForAchievement({
+        achievementId: 539803,
+        startDateStr,
+        endDateStr,
+      }),
+    earnedGapInWallAEver: await achievementUnlockFetcher.getUsersForAchievement(
+      {
+        achievementId: 538763,
+        startDateStr: eventStartDateStr,
+        endDateStr,
+      },
+    ),
+    earnedGapInWallBEver: await achievementUnlockFetcher.getUsersForAchievement(
+      {
+        achievementId: 539801,
+        startDateStr: eventStartDateStr,
+        endDateStr,
+      },
+    ),
+    earnedUndergroundTunnelAEver:
+      await achievementUnlockFetcher.getUsersForAchievement({
+        achievementId: 539802,
+        startDateStr: eventStartDateStr,
+        endDateStr,
+      }),
+    earnedUndergroundTunnelBEver:
+      await achievementUnlockFetcher.getUsersForAchievement({
+        achievementId: 539803,
+        startDateStr: eventStartDateStr,
+        endDateStr,
+      }),
+    earned1tpA: await achievementUnlockFetcher.getUsersForAchievement({
+      achievementId: 539804,
+      startDateStr,
+      endDateStr,
+    }),
+    earned1tpB: await achievementUnlockFetcher.getUsersForAchievement({
+      achievementId: 539805,
+      startDateStr,
+      endDateStr,
+    }),
+    earned1tpC: await achievementUnlockFetcher.getUsersForAchievement({
+      achievementId: 539806,
+      startDateStr,
+      endDateStr,
+    }),
+    earned1tpD: await achievementUnlockFetcher.getUsersForAchievement({
+      achievementId: 539807,
+      startDateStr,
+      endDateStr,
+    }),
+    earned1tpE: await achievementUnlockFetcher.getUsersForAchievement({
+      achievementId: 539808,
+      startDateStr,
+      endDateStr,
+    }),
+    earned1tpF: await achievementUnlockFetcher.getUsersForAchievement({
+      achievementId: 539809,
+      startDateStr,
+      endDateStr,
+    }),
+    earned1tpG: await achievementUnlockFetcher.getUsersForAchievement({
+      achievementId: 539810,
+      startDateStr,
+      endDateStr,
+    }),
+    earned1tpH: await achievementUnlockFetcher.getUsersForAchievement({
+      achievementId: 539811,
+      startDateStr,
+      endDateStr,
+    }),
+    earned1tpAEver: await achievementUnlockFetcher.getUsersForAchievement({
+      achievementId: 539804,
+      startDateStr: eventStartDateStr,
+      endDateStr,
+    }),
+    earned1tpBEver: await achievementUnlockFetcher.getUsersForAchievement({
+      achievementId: 539805,
+      startDateStr: eventStartDateStr,
+      endDateStr,
+    }),
+    earned1tpCEver: await achievementUnlockFetcher.getUsersForAchievement({
+      achievementId: 539806,
+      startDateStr: eventStartDateStr,
+      endDateStr,
+    }),
+    earned1tpDEver: await achievementUnlockFetcher.getUsersForAchievement({
+      achievementId: 539807,
+      startDateStr: eventStartDateStr,
+      endDateStr,
+    }),
+    earned1tpEEver: await achievementUnlockFetcher.getUsersForAchievement({
+      achievementId: 539808,
+      startDateStr: eventStartDateStr,
+      endDateStr,
+    }),
+    earned1tpFEver: await achievementUnlockFetcher.getUsersForAchievement({
+      achievementId: 539809,
+      startDateStr: eventStartDateStr,
+      endDateStr,
+    }),
+    earned1tpGEver: await achievementUnlockFetcher.getUsersForAchievement({
+      achievementId: 539810,
+      startDateStr: eventStartDateStr,
+      endDateStr,
+    }),
+    earned1tpHEver: await achievementUnlockFetcher.getUsersForAchievement({
+      achievementId: 539811,
+      startDateStr: eventStartDateStr,
+      endDateStr,
+    }),
+    earned2tpA: await achievementUnlockFetcher.getUsersForAchievement({
+      achievementId: 539812,
+      startDateStr,
+      endDateStr,
+    }),
+    earned2tpB: await achievementUnlockFetcher.getUsersForAchievement({
+      achievementId: 539813,
+      startDateStr,
+      endDateStr,
+    }),
+    earned2tpC: await achievementUnlockFetcher.getUsersForAchievement({
+      achievementId: 539814,
+      startDateStr,
+      endDateStr,
+    }),
+    earned2tpD: await achievementUnlockFetcher.getUsersForAchievement({
+      achievementId: 539815,
+      startDateStr,
+      endDateStr,
+    }),
+    earned2tpE: await achievementUnlockFetcher.getUsersForAchievement({
+      achievementId: 539816,
+      startDateStr,
+      endDateStr,
+    }),
+    earned2tpF: await achievementUnlockFetcher.getUsersForAchievement({
+      achievementId: 539817,
+      startDateStr,
+      endDateStr,
+    }),
+    earned2tpAEver: await achievementUnlockFetcher.getUsersForAchievement({
+      achievementId: 539812,
+      startDateStr: eventStartDateStr,
+      endDateStr,
+    }),
+    earned2tpBEver: await achievementUnlockFetcher.getUsersForAchievement({
+      achievementId: 539813,
+      startDateStr: eventStartDateStr,
+      endDateStr,
+    }),
+    earned2tpCEver: await achievementUnlockFetcher.getUsersForAchievement({
+      achievementId: 539814,
+      startDateStr: eventStartDateStr,
+      endDateStr,
+    }),
+    earned2tpDEver: await achievementUnlockFetcher.getUsersForAchievement({
+      achievementId: 539815,
+      startDateStr: eventStartDateStr,
+      endDateStr,
+    }),
+    earned2tpEEver: await achievementUnlockFetcher.getUsersForAchievement({
+      achievementId: 539816,
+      startDateStr: eventStartDateStr,
+      endDateStr,
+    }),
+    earned2tpFEver: await achievementUnlockFetcher.getUsersForAchievement({
+      achievementId: 539817,
+      startDateStr: eventStartDateStr,
+      endDateStr,
+    }),
+
+    earnedRubyA: await achievementUnlockFetcher.getUsersForAchievement({
+      achievementId: 539818,
+      startDateStr,
+      endDateStr,
+    }),
+    earnedRubyB: await achievementUnlockFetcher.getUsersForAchievement({
+      achievementId: 539819,
+      startDateStr,
+      endDateStr,
+    }),
+    earnedRubyC: await achievementUnlockFetcher.getUsersForAchievement({
+      achievementId: 539820,
+      startDateStr,
+      endDateStr,
+    }),
+    earnedRubyD: await achievementUnlockFetcher.getUsersForAchievement({
+      achievementId: 539821,
+      startDateStr,
+      endDateStr,
+    }),
+
+    alreadyHasCredit: await achievementUnlockFetcher.getUsersForAchievement({
+      achievementId: 530939,
+      startDateStr: eventStartDateStr,
+      endDateStr,
+    }),
+  };
+
+  const earnedTask19RewardEver = [
+    ...new Set([
+      ...userList.searchNWTotal,
+      ...userList.searchNTotal,
+      ...userList.searchNETotal,
+      ...userList.searchETotal,
+      ...userList.searchSETotal,
+      ...userList.searchSTotal,
+      ...userList.searchSWTotal,
+      ...userList.searchWTotal,
+    ]),
+  ];
+
+  const fullRewardList = {};
+  earnedTask19RewardEver.forEach(
+    (user) => (fullRewardList[user] = getTask19RewardList({ username: user })),
+  );
+
+  const earnedRewards = [
+    { direction: "nw", fullName: "North West", users: userList.searchNW },
+    { direction: "n", fullName: "North", users: userList.searchN },
+    { direction: "ne", fullName: "North East", users: userList.searchNE },
+    { direction: "e", fullName: "East", users: userList.searchE },
+    { direction: "se", fullName: "South East", users: userList.searchSE },
+    { direction: "s", fullName: "South", users: userList.searchS },
+    { direction: "sw", fullName: "South West", users: userList.searchSW },
+    { direction: "w", fullName: "West", users: userList.searchW },
+  ];
+
+  const earnedRewardsEver = [
+    { direction: "nw", fullName: "North West", users: userList.searchNWTotal },
+    { direction: "n", fullName: "North", users: userList.searchNTotal },
+    { direction: "ne", fullName: "North East", users: userList.searchNETotal },
+    { direction: "e", fullName: "East", users: userList.searchETotal },
+    { direction: "se", fullName: "South East", users: userList.searchSETotal },
+    { direction: "s", fullName: "South", users: userList.searchSTotal },
+    { direction: "sw", fullName: "South West", users: userList.searchSWTotal },
+    { direction: "w", fullName: "West", users: userList.searchWTotal },
+  ];
+
+  const rewardDataToday = [];
+  earnedRewards.forEach((direction) => {
+    direction.users.sort().forEach((user) => {
+      rewardDataToday.push({
+        user: user,
+        direction: direction.direction,
+        fullDirectionName: direction.fullName,
+        reward: fullRewardList[user][direction.direction],
+      });
+    });
+  });
+
+  const rewardDataAllTime = [];
+  earnedRewardsEver.forEach((direction) => {
+    direction.users.sort().forEach((user) => {
+      rewardDataAllTime.push({
+        user: user,
+        direction: direction.direction,
+        fullDirectionName: direction.fullName,
+        reward: fullRewardList[user][direction.direction],
+      });
+    });
+  });
+
+  rewardDataToday.sort((a, b) => {
+    const userA = a.user.toLowerCase();
+    const userB = b.user.toLowerCase();
+    if (userA < userB) return -1;
+    if (userA > userB) return 1;
+    return 0;
+  });
+
+  const foundEntranceAToday = rewardDataToday
+    .filter((data) => data.reward === "A Gap in the Wall (Entrance)")
+    .map((data) => data.user);
+
+  const foundEntranceBToday = rewardDataToday
+    .filter((data) => data.reward === "An Underground Tunnel (Entrance)")
+    .map((data) => data.user);
+
+  const foundBigKeyEver = rewardDataAllTime
+    .filter((data) => data.reward === "A Large Gold Key")
+    .map((data) => data.user);
+
+  const foundEntranceAEver = rewardDataAllTime
+    .filter((data) => data.reward === "A Gap in the Wall (Entrance)")
+    .map((data) => data.user);
+
+  const foundEntranceBEver = rewardDataAllTime
+    .filter((data) => data.reward === "An Underground Tunnel (Entrance)")
+    .map((data) => data.user);
+
+  const completedTask21Today = [
+    ...new Set([
+      ...foundEntranceAToday.filter((user) =>
+        userList.earnedGapInWallAEver.includes(user),
+      ),
+      ...foundEntranceAToday.filter((user) =>
+        userList.earnedGapInWallBEver.includes(user),
+      ),
+      ...foundEntranceBToday.filter((user) =>
+        userList.earnedUndergroundTunnelAEver.includes(user),
+      ),
+      ...foundEntranceBToday.filter((user) =>
+        userList.earnedUndergroundTunnelBEver.includes(user),
+      ),
+      ...userList.earnedGapInWallA.filter((user) =>
+        foundEntranceAEver.includes(user),
+      ),
+      ...userList.earnedGapInWallB.filter((user) =>
+        foundEntranceAEver.includes(user),
+      ),
+      ...userList.earnedUndergroundTunnelA.filter((user) =>
+        foundEntranceBEver.includes(user),
+      ),
+      ...userList.earnedUndergroundTunnelB.filter((user) =>
+        foundEntranceBEver.includes(user),
+      ),
+    ]),
+  ];
+
+  const completedTask21Ever = [
+    ...new Set([
+      ...foundEntranceAEver.filter((user) =>
+        userList.earnedGapInWallAEver.includes(user),
+      ),
+      ...foundEntranceAEver.filter((user) =>
+        userList.earnedGapInWallBEver.includes(user),
+      ),
+      ...foundEntranceBEver.filter((user) =>
+        userList.earnedUndergroundTunnelAEver.includes(user),
+      ),
+      ...foundEntranceBEver.filter((user) =>
+        userList.earnedUndergroundTunnelBEver.includes(user),
+      ),
+    ]),
+  ];
+
+  const earnedAnyTpToday = [
+    ...new Set([
+      ...userList.earned1tpA,
+      ...userList.earned1tpB,
+      ...userList.earned1tpC,
+      ...userList.earned1tpD,
+      ...userList.earned1tpE,
+      ...userList.earned1tpF,
+      ...userList.earned1tpG,
+      ...userList.earned1tpH,
+      ...userList.earned2tpA,
+      ...userList.earned2tpB,
+      ...userList.earned2tpC,
+      ...userList.earned2tpD,
+      ...userList.earned2tpE,
+      ...userList.earned2tpF,
+    ]),
+  ];
+
+  const earnedAnyTpEver = [
+    ...new Set([
+      ...userList.earned1tpAEver,
+      ...userList.earned1tpBEver,
+      ...userList.earned1tpCEver,
+      ...userList.earned1tpDEver,
+      ...userList.earned1tpEEver,
+      ...userList.earned1tpFEver,
+      ...userList.earned1tpGEver,
+      ...userList.earned1tpHEver,
+      ...userList.earned2tpAEver,
+      ...userList.earned2tpBEver,
+      ...userList.earned2tpCEver,
+      ...userList.earned2tpDEver,
+      ...userList.earned2tpEEver,
+      ...userList.earned2tpFEver,
+    ]),
+  ];
+
+  const totalTp = {};
+  for (const user of earnedAnyTpEver) {
+    [
+      { list: userList.earned1tpAEver, tp: 1 },
+      { list: userList.earned1tpBEver, tp: 1 },
+      { list: userList.earned1tpCEver, tp: 1 },
+      { list: userList.earned1tpDEver, tp: 1 },
+      { list: userList.earned1tpEEver, tp: 1 },
+      { list: userList.earned1tpFEver, tp: 1 },
+      { list: userList.earned1tpGEver, tp: 1 },
+      { list: userList.earned1tpHEver, tp: 1 },
+      { list: userList.earned2tpAEver, tp: 2 },
+      { list: userList.earned2tpBEver, tp: 2 },
+      { list: userList.earned2tpCEver, tp: 2 },
+      { list: userList.earned2tpDEver, tp: 2 },
+      { list: userList.earned2tpEEver, tp: 2 },
+      { list: userList.earned2tpFEver, tp: 2 },
+      { list: foundBigKeyEver, tp: 3 },
+    ].forEach(({ list, tp }) => {
+      if (list.includes(user)) {
+        totalTp[user] = (totalTp[user] || 0) + tp;
+      }
+    });
+  }
+
+  const completedTask22Ever = Object.keys(totalTp).filter(
+    (user) => totalTp[user] >= 12,
+  );
+
+  const completedTask22Today = completedTask22Ever.filter((user) =>
+    earnedAnyTpToday.includes(user),
+  );
+
+  const newlyCompletedUsers = [
+    ...new Set([
+      ...completedTask21Today.filter((user) =>
+        completedTask22Ever.includes(user),
+      ),
+      ...completedTask22Today.filter((user) =>
+        completedTask21Ever.includes(user),
+      ),
+    ]),
+  ].filter((user) => !userList.alreadyHasCredit.includes(user));
+
+  console.log(newlyCompletedUsers);
+
+  const output = [];
+
+  addTaskSummaryIfNotEmpty({
+    output,
+    userList: userList.earnedGapInWallA,
+    weekNumber: 6,
+    taskNumber: 21,
+    taskName: "Wall Entrance (Tom & Jerry)",
+  });
+  addTaskSummaryIfNotEmpty({
+    output,
+    userList: userList.earnedGapInWallB,
+    weekNumber: 6,
+    taskNumber: 21,
+    taskName: "Wall Entrance (Rugrats)",
+  });
+  addTaskSummaryIfNotEmpty({
+    output,
+    userList: userList.earnedUndergroundTunnelA,
+    weekNumber: 6,
+    taskNumber: 21,
+    taskName: "Tunnel Entrance (Addams Family)",
+  });
+  addTaskSummaryIfNotEmpty({
+    output,
+    userList: userList.earnedUndergroundTunnelB,
+    weekNumber: 6,
+    taskNumber: 21,
+    taskName: "Tunnel Entrance (Bug's Life)",
+  });
+  addTaskSummaryIfNotEmpty({
+    output,
+    userList: userList.earned1tpA,
+    weekNumber: 6,
+    taskNumber: 22,
+    taskName: "1TP (Maze of Galious)",
+  });
+  addTaskSummaryIfNotEmpty({
+    output,
+    userList: userList.earned1tpB,
+    weekNumber: 6,
+    taskNumber: 22,
+    taskName: "1TP (Tobal 2)",
+  });
+  addTaskSummaryIfNotEmpty({
+    output,
+    userList: userList.earned1tpC,
+    weekNumber: 6,
+    taskNumber: 22,
+    taskName: "1TP (Cleopatra Fortune)",
+  });
+  addTaskSummaryIfNotEmpty({
+    output,
+    userList: userList.earned1tpD,
+    weekNumber: 6,
+    taskNumber: 22,
+    taskName: "1TP (Kapt'n Blaubar)",
+  });
+  addTaskSummaryIfNotEmpty({
+    output,
+    userList: userList.earned1tpE,
+    weekNumber: 6,
+    taskNumber: 22,
+    taskName: "1TP (A-Mazing Tater)",
+  });
+  addTaskSummaryIfNotEmpty({
+    output,
+    userList: userList.earned1tpF,
+    weekNumber: 6,
+    taskNumber: 22,
+    taskName: "1TP (Shining in the Darkness)",
+  });
+  addTaskSummaryIfNotEmpty({
+    output,
+    userList: userList.earned1tpG,
+    weekNumber: 6,
+    taskNumber: 22,
+    taskName: "1TP (Pyramid of Ra)",
+  });
+  addTaskSummaryIfNotEmpty({
+    output,
+    userList: userList.earned1tpH,
+    weekNumber: 6,
+    taskNumber: 22,
+    taskName: "1TP (Dark and Under)",
+  });
+  addTaskSummaryIfNotEmpty({
+    output,
+    userList: userList.earned2tpA,
+    weekNumber: 6,
+    taskNumber: 22,
+    taskName: "2TP (Maze of Galious)",
+  });
+  addTaskSummaryIfNotEmpty({
+    output,
+    userList: userList.earned2tpB,
+    weekNumber: 6,
+    taskNumber: 22,
+    taskName: "2TP (Tobal 2)",
+  });
+  addTaskSummaryIfNotEmpty({
+    output,
+    userList: userList.earned2tpC,
+    weekNumber: 6,
+    taskNumber: 22,
+    taskName: "2TP (Cleopatra Fortune)",
+  });
+  addTaskSummaryIfNotEmpty({
+    output,
+    userList: userList.earned2tpD,
+    weekNumber: 6,
+    taskNumber: 22,
+    taskName: "2TP (Kapt'n Blaubar)",
+  });
+  addTaskSummaryIfNotEmpty({
+    output,
+    userList: userList.earned2tpE,
+    weekNumber: 6,
+    taskNumber: 22,
+    taskName: "2TP (A-Mazing Tater)",
+  });
+  addTaskSummaryIfNotEmpty({
+    output,
+    userList: userList.earned2tpF,
+    weekNumber: 6,
+    taskNumber: 22,
+    taskName: "2TP (Shining in the Darkness)",
+  });
+  addTaskSummaryIfNotEmpty({
+    output,
+    userList: userList.earnedRubyA,
+    weekNumber: 6,
+    taskNumber: 24,
+    taskName: "Ruby (Young Merlin)",
+  });
+  addTaskSummaryIfNotEmpty({
+    output,
+    userList: userList.earnedRubyB,
+    weekNumber: 6,
+    taskNumber: 24,
+    taskName: "Ruby (Mortal Kombat",
+  });
+  addTaskSummaryIfNotEmpty({
+    output,
+    userList: userList.earnedRubyC,
+    weekNumber: 6,
+    taskNumber: 24,
+    taskName: "Ruby (Zipball)",
+  });
+  addTaskSummaryIfNotEmpty({
+    output,
+    userList: userList.earnedRubyD,
+    weekNumber: 6,
+    taskNumber: 24,
+    taskName: "Ruby (Aladdin)",
+  });
+
+  output.push(
+    `-# **Chapter 6 Completion awarded to ${newlyCompletedUsers.length} ${newlyCompletedUsers.length > 1 ? "players" : "player"}**: ${outputUserList(newlyCompletedUsers)}`,
+  );
+
+  return output.join("\n");
+}
+
+const outputs = [
+  await retroAdventureWeek1(),
+  await retroAdventureWeek2(),
+  await retroAdventureWeek3(),
+  await retroAdventureWeek4(),
+  await retroAdventureWeek5(),
+  await retroAdventureWeek6(),
+];
 
 console.log(
   [
     process.argv[3]
       ? `# RetroAdventures: tRAsure Island - Summary for ${givenDateStr} to ${process.argv[3]}`
       : `# RetroAdventures: tRAsure Island - Summary for ${givenDateStr}`,
-    outputs.week1,
-    outputs.week2,
-    outputs.week3,
-    outputs.week4,
-    outputs.week5,
+    ...outputs,
   ].join("\n\n"),
 );
